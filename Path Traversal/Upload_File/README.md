@@ -1,0 +1,62 @@
+# Upload File Path Traversal 
+
+ [link challange](https://battle.cookiearena.org/challenges/web/upload-file-path-traversal)
+
+> Đề bài : nói là hãy thực thi 1 con shell trên server của tao đi ! 
+ đây là giao diện của nó ! 
+ ![Alt text](image.png)
+
+Đau tiên hãy dùng như người dùng bình thường !
+![Alt text](image-1.png)
+upload lên thì nó nằm ở trong upload ! 
+thử upload file khác xem sao ! 
+![Alt text](image-2.png)
+ txt thì lỗi 
+check burp xem có request gửi txt đi chưa , nếu chưa thì chứng tỏ nó filter ở client 
+![Alt text](image-3.png)
+ko có => chứng tỏ nó filter ở clinet , xóa code js là done :>>
+hoặc là lấy request hợp lệ kia sửa là done , ko cần care tới validate! 
+sau khi upload xong thì có thể vào upload và xem được ảnh 
+ý tưởng là update file php lên rồi call system 
+
+oki mình up file vào upload
+![Alt text](image-4.png)
+nó ko cho mình vào foribiden mà vào trực tiếp như này ! 
+rồi thử back ra ngoài rồi up xem sao ! 
+![Alt text](image-5.png)
+nó filter ../ của mình 
+![Alt text](image-6.png)
+nhập hai dấu chấm vẫn pass ! 
+![Alt text](image-7.png)
+mất chữ a luôn chứng tỏ nó filter mọi chữ cái phía trước dấu / 
+bây giờ ko dùng  / thử thành  %2f thì sao 
+![Alt text](image-8.png)
+đã pass ! 
+giờ nó đã nằm cùng cấp với upload ! 
+thử vào xem được chưa 
+![Alt text](image-9.png)
+đã vào được, thay đổi payload ở body nhé ,  nãy chắc viết sai :))
+
+các làm bằng intruder 
+add position payload 
+past payload 
+-> payload processing 
+chỉnh  \{FILE\} thành filename mình muốn 
+tắt url url encode
+start attack 
+và grep :  kí ..
+![Alt text](image-10.png)
+
+ở đây trả về thêm \  sao json encode khi trả về ! 
+lùi 1 cấp cùng với upload thì xem được 
+lùi cấp nữa thì ko được vì mình là user bình thường , nó sẽ ko response trả về 
+
+Giờ mình đã đọc được file php trên server 
+giờ cần thêm payload chính là shell 
+các hàm shell trên php như sau  ! 
+shell_exec(string command)  : excurted cammand  via shell and return the completed string 
+cái này có chức năng giống backticks `` 
+system(string command ) 
+![Alt text](image-11.png)
+đã thấy được flag 
+giờ cat nó ra là có flag ! 
