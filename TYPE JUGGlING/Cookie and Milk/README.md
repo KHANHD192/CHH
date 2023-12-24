@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Cookie and Milk 
 
 
@@ -23,7 +22,7 @@ như thế kia vì ```$b=0``` là số thì ```$a``` cũng được ép thành s
 [các bạn có thể xem thêm ở đây](https://github.com/spaze/hashes/blob/master/sha1.md)
 vậy nên chỉ cần tìm hai chuỗi hash magic thì có phải nó đều được parse ra 0 thì 0 == 0  => return true
 
-### BẮT ĐÀUA VÀO BÀI 
+### BẮT ĐẦU VÀO BÀI 
 SOURCE CODE : 
 ```
 <?php
@@ -56,7 +55,7 @@ giờ nhiệm vụ là tìm hai chuỗi hash theo sha1 mà đều ra 0 -> ra fla
 ```
 GET /?_COOKIE[magic]=aaroZmOk&_SESSION[magic]=aaK1STfY 
 ```
-aaroZmOk:0e66507019969427134894567494305185566735
+>aaroZmOk:0e66507019969427134894567494305185566735
 aaK1STfY:0e76658526655756207688271159624026011393 
 ->  và ta đã có flag 
 ``` CHH{TYpE_jU6gliNg_d5c3bd02e90fd038d98ad9c362715c47}```
@@ -118,6 +117,7 @@ giờ nhiệm vụ là tìm hai chuỗi hash theo sha1 mà đều ra 0 -> ra fla
 ```
 GET /?_COOKIE[magic]=aaroZmOk&_SESSION[magic]=aaK1STfY 
 ```
+aaroZmOk:0e66507019969427134894567494305185566735
+aaK1STfY:0e76658526655756207688271159624026011393 
 ->  và ta đã có flag 
 ``` CHH{TYpE_jU6gliNg_d5c3bd02e90fd038d98ad9c362715c47}```
->>>>>>> 1e2b711503ede3642cbed596f8aac8842cf5abf3
