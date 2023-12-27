@@ -14,7 +14,7 @@ Dạo quanh 1 vòng web thì mình thấy web này là chức năng là check wi
 ## Vào bài 
 
 ### Flag1
- ** Tác giả nói flag nằm database thì chắc chắn là sqli rồi**
+ **Tác giả nói flag nằm database thì chắc chắn là sqli rồi**
  Mò từng chắc năng thì mình thấy chức năng **Login,Register,Search** là có khả năng dính sqli nhất 
 
 Theo tổ tiên mắc bảo mình sẽ focus vào chức năng *Seach* trước 
@@ -42,13 +42,15 @@ mình thử 14 cột vào nó báo là cột thứ 14 không tồn tại
 giảm payload xuống 13 
 và đã success , mình đã comfirm được nó có 13 cột trong câu truy vấn thứ nhất , từ bảng accesspoint 
 và mình có hint từ tác giả , bảng *accessoint* như sau :
+
 ![Alt text](image-6.png)
 
-vì câu truy vấn của nó là * TỪ accsetpoint nên mình phải tham chiếu theo kiểu dữ liệu của nó để chèn cho hợp lý ! 
+vì câu truy vấn của nó là ```* FROM accsetpoint``` nên mình phải tham chiếu theo kiểu dữ liệu của nó để chèn cho hợp lý ! 
 Nếu chèn ngẫu nghiên thì nó sẽ log lỗi kiểu dữ liệu ko phù hợp 
 ![Alt text](image-7.png)
 
-payload:``` 1' UNION SELECT 1,2.2,33.3,'a','b','c','d','a','e','f','2021-12-03','h','j' --```
+payload: ``` 1' UNION SELECT 1,2.2,33.3,'a','b','c','d','a','e','f','2021-12-03','h','j' --```
+
 ![Alt text](image-8.png)
 
 các vị trí mình đánh dấu là value trả ra ngoài chúng ta có thể inject vào vị trí đó để extract được data trong db !
@@ -63,7 +65,8 @@ payload:
 ```
 SELECT STRING_AGG(table_name, ', ') FROM information_schema.tables
 ```
-phải dùng String_AGG để đưa output của mình thành string , ko nó sẽ log lỗi vì mình return thêm 1 cột :
+phải dùng String_AGG để đưa output của mình thành string , ko nó sẽ log lỗi vì mình return thêm 1 cột 
+
 và ta đã phát hiện trong đó có một cột tên là *flagn8jdj* 
 
 ![Alt text](image-10.png)
@@ -71,6 +74,7 @@ và ta đã phát hiện trong đó có một cột tên là *flagn8jdj*
 giờ thì lấy ra column của table đó rồi extract value : 
 
 ![Alt text](image-11.png)
+
 
 ![Alt text](image-12.png)
 
@@ -82,8 +86,8 @@ giờ thì lấy ra column của table đó rồi extract value :
 
 #### FLAG2
  viết hơi dài mỏi tay :> flag2 là password của admin trong bảng users nhé ( lúc trong thời gian làm bài mình làm cách khó hơn đó là trigger error base -> không hiểu sao lại đi chọn cách khó hơn )
+
  Nói về cách trigger ERROR base : 
- PAYLOAD : 
  ```
  1' and 1=(SELECT CASE WHEN(1=1) THEN 1/(SELECT 0) ELSE NULL END) --
  ```
@@ -97,12 +101,12 @@ giờ thì lấy ra column của table đó rồi extract value :
  Chúng ta sẽ nói về cách dễ hơn vì union trả về value mà : >
 ![Alt text](image-15.png)
 chúng ta kiểm tra role thấy chỉ có hai quyền là user và admin 
-giờ lấy password ra thôi  : 
-payload : 
+giờ lấy password ra thôi  :  
 ```
 (SELECT STRING_AGG(password, ', ') FROM users where role='admin' )
 ```
 ![Alt text](image-16.png)
+
 dehash password chúng ta sẽ có flag => 64 kí tự thì ko phaỉ md5 rồi , còn sha1,sha256 
 dehash sha256 : basketball -> login
 #### flag
@@ -116,8 +120,9 @@ sau một hồi mò thì mình biết file được lưu ở /static/uploads/  n
 
 enpoint dính lỗi là : upload file pcap 
 inject payload vào phần filename  : nó filter / và space  
-${home:0:1} : /  đây là biến môi trường trong linux : 0,1 chính là substring 
-${IFS} : space 
+```${home:0:1}```: /  đây là biến môi trường trong linux : 0,1 chính là substring 
+
+```${IFS}``` : space 
 
 ![Alt text](image-17.png)
 có request tới burp chứng tỏ mình đã inject đúng chỗ (vì đây là blind nên mình cần gửi file FLAGXXXX.txt qua server của mình)
