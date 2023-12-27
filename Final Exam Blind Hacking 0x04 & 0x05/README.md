@@ -5,10 +5,12 @@ Dạo quanh 1 vòng web thì mình thấy web này là chức năng là check wi
  mình dùng wappalyzer detect được back-end nó dùng python (Flask)
  
  ![Alt text](image.png)
+
  Mình dùng dirsearch để kiểm enpoint ẩn 
  Ngoài một số module trên web hiển thị ra thì mình thấy có vài enpoint mới ! 
  
  ![Alt text](image-1.png)
+ 
  biết đâu mình sẽ cần tới nó :>> 
 
 ## Vào bài 
